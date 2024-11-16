@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flashcard Quiz</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      height: 100vh;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    .flashcard {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    .flashcard p {
+      font-size: 18px;
+      color: #333;
+      margin: 0;
+    }
+
+    .button {
+      background-color: #007bff;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin: 5px;
+    }
+
+    .button:hover {
+      background-color: #0056b3;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .fade {
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div id="flashcard" class="flashcard fade">
+    <p id="content">Loading...</p>
+  </div>
+  <button class="button" onclick="showPreviousCard()">Back</button>
+  <button class="button" onclick="flipCard()">Flip</button>
+  <button class="button" onclick="showNextCard()">Next</button>
+</div>
+
+<script>
+  const flashcards = [
+    { question: "What is the significance of bulbous roots?", answer: "Bulbous roots indicate hypercementosis and can complicate extractions due to their irregular shape." },
+    { question: "What conditions may cause swelling in the submandibular gland?", answer: "Salivary gland stones, infections, autoimmune diseases, or tumors may cause swelling." },
+    { question: "How can fibrous dysplasia affect the jaw?", answer: "It leads to structural deformities, asymmetry, and appears as 'ground-glass' radiopacity on radiographs." },
+    { question: "What is an OAC, and how does it occur?", answer: "An OAC is an opening between the oral cavity and sinus, often after upper posterior tooth extractions." },
+    { question: "What is the clinical management for maxillary sinus polyps?", answer: "Treatment includes decongestants, corticosteroids, antibiotics, or surgical removal if necessary." },
+    { question: "What are common causes of periapical lesions?", answer: "Caused by pulp infections; treated with root canal therapy or apicoectomy for persistent cases." },
+    { question: "What precautions should be taken after a sinus lift?", answer: "Avoid sneezing, nose blowing, and using straws; take prescribed antibiotics and decongestants." },
+    { question: "What are the radiographic signs of osteoradionecrosis?", answer: "Irregular bone destruction with radiolucent and radiopaque areas; clinically seen as exposed non-healing bone." },
+    { question: "What is the importance of scaling history in periodontal evaluation?", answer: "It helps assess past treatment effectiveness and guides future interventions like root planing or surgery." },
+    { question: "What is the management protocol for salivary gland stones?", answer: "Promote hydration, use sialogogues, or remove surgically if necessary; persistent cases may require gland excision." },
+    { question: "How is a periapical cyst differentiated from a granuloma?", answer: "A cyst is epithelial-lined, appearing radiographically as a defined radiolucency; a granuloma lacks epithelial lining." },
+    { question: "What are signs of chronic maxillary sinusitis on radiographs?", answer: "Signs include mucosal thickening, air-fluid levels, or sinus opacification, often accompanied by facial pain." },
+    { question: "How can dental infections cause Ludwig's angina?", answer: "Dental infections may spread to fascial neck spaces, causing life-threatening airway obstruction. Immediate IV antibiotics and drainage are needed." },
+    { question: "What is the pathophysiology of hypercementosis?", answer: "Hypercementosis involves excessive cementum deposition, often linked to trauma or systemic diseases like Paget's." },
+    { question: "What are the risks of an unerupted molar near the inferior dental canal?", answer: "It may damage the nerve during extraction, causing paresthesia. CBCT imaging helps assess proximity." }
+  ];
+
+  let currentCard = 0;
+  let showingQuestion = true;
+
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+
+  function showNextCard() {
+    currentCard = (currentCard + 1) % flashcards.length;
+    showingQuestion = true;
+    updateCardContent();
+  }
+
+  function showPreviousCard() {
+    currentCard = (currentCard - 1 + flashcards.length) % flashcards.length;
+    showingQuestion = true;
+    updateCardContent();
+  }
+
+  function flipCard() {
+    showingQuestion = !showingQuestion;
+    updateCardContent();
+  }
+
+  function updateCardContent() {
+    const flashcardDiv = document.getElementById("flashcard");
+    const card = flashcards[currentCard];
+    flashcardDiv.classList.add("hidden");
+
+    setTimeout(() => {
+      flashcardDiv.classList.remove("hidden");
+      flashcardDiv.classList.add("fade");
+
+      document.getElementById("content").textContent = showingQuestion ? card.question : card.answer;
+    }, 300);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    shuffle(flashcards);
+    updateCardContent();
+  });
+</script>
+
+</body>
+</html>
